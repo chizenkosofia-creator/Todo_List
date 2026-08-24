@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{% if object %}Update Tag{% else %}Add Tag{% endif %}</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+    <a href="{% url 'todo:tag-list' %}">Cancel</a>
+</form>
+{% endblock %}
