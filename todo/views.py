@@ -38,6 +38,7 @@ class ToggleTaskStatusView(View):
         task.save()
         return redirect("todo:task-list")
 
+
 class TagListView(generic.ListView):
     model = Tag
     template_name = "todo/tag_list.html"
