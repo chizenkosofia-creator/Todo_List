@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Todo List</h2>
+<a href="{% url 'todo:task-create' %}"><button>Add Task</button></a>
+<br><br>
+
+{% for task in task_list %}
+    <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;">
+        <p><strong>Task:</strong> {{ task.content }}</p>
+        <p><strong>Status:</strong> {% if task.done %}Done{% else %}Not done{% endif %}</p>
+        <p><strong>Created:</strong> {{ task.datetime }}</p>
+        {% if task.deadline %}
+            <p><strong>Deadline:</strong> {{ task.deadline }}</p>
+        {% endif %}
+        <p><strong>Tags:</strong> 
+            {% for tag in task.tags.all %}
+                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% empty %}
+                None
+            {% endfor %}
+        </p>
+        <a href="{% url 'todo:task-update' task.pk %}">Update</a> |
+        <a href="{% url 'todo:task-delete' task.pk %}">Delete</a> |
+        {% if task.done %}
+    <form action="{% url 'todo:task-toggle' task.pk %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Undo</button>
+    </form>
+{% else %}
+    <form action="{% url 'todo:task-toggle' task.pk %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Complete</button>
+    </form>
+{% endif %}
+    </div>
+{% empty %}
+    <p>No tasks yet.</p>
+{% endfor %}
+{% endblock %}
